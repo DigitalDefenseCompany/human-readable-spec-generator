@@ -35,7 +35,7 @@ async function summarizeRepoContents(): Promise<string> {
         content: 'Summarize the following repository content: ' + content
       }
     ],
-    model: 'gpt-3.5-turbo',
+    model: 'gpt-3.5-turbo'
   })
 
   const messageContent = completion.choices[0].message?.content
