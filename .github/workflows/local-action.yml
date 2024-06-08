@@ -5,8 +5,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  test-action:
-    name: Local Action Test
+  summarize-repo:
+    name: Summarize Repository
     runs-on: ubuntu-latest
 
     steps:
@@ -14,12 +14,10 @@ jobs:
         id: checkout
         uses: actions/checkout@v4
 
-      - name: Test Local Action
-        id: test-action
+      - name: Run Summarizer
+        id: run-summarizer
         uses: ./
-        with:
-          milliseconds: 2000
 
       - name: Print Output
         id: output
-        run: echo "${{ steps.test-action.outputs.time }}"
+        run: 'echo "Summary: ${steps.test-action.outputs.time}"'

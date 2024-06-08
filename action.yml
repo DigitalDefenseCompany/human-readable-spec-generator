@@ -1,21 +1,16 @@
-name: 'The name of your action here'
-description: 'Provide a description here'
+name: 'Repository Summarizer'
+description:
+  'Summarizes the contents of the repository and creates/updates an issue with
+  the summary.'
 author: 'Your name or organization here'
 
-# Define your inputs here.
-inputs:
-  milliseconds:
-    description: 'Your input description here'
-    required: true
-    default: '1000'
-
-# Define your outputs here.
 outputs:
-  time:
-    description: 'Your output description here'
+  summary:
+    description: 'The summary of the repository contents'
 
 runs:
   using: docker
   image: Dockerfile
   env:
-    INPUT_MILLISECONDS: ${{ inputs.milliseconds }}
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
