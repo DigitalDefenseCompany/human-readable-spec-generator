@@ -29162,8 +29162,11 @@ const wait_1 = __nccwpck_require__(5259);
  */
 async function run() {
     try {
+        // print milliseconds input
+        core.info(`milliseconds: ${core.getInput('milliseconds')}`);
         // Get the action input(s)
         const ms = parseInt(core.getInput('milliseconds'), 10);
+        core.info(`Waiting ${ms} milliseconds ...`);
         // Output the payload for debugging
         // Debug logs are only output if the `ACTIONS_STEP_DEBUG` secret is true
         core.debug(`The event payload: ${JSON.stringify(github.context.payload, null, 2)}`);

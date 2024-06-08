@@ -1,0 +1,25 @@
+name: Local Action Test
+
+# This workflow will only run when manually triggered
+on:
+  workflow_dispatch:
+
+jobs:
+  test-action:
+    name: Local Action Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v4
+
+      - name: Test Local Action
+        id: test-action
+        uses: ./
+        with:
+          milliseconds: 2000
+
+      - name: Print Output
+        id: output
+        run: echo "${{ steps.test-action.outputs.time }}"
