@@ -1,4 +1,4 @@
-name: Local Action Test
+name: Summarize Action
 
 # This workflow will only run when manually triggered
 on:
@@ -17,6 +17,9 @@ jobs:
       - name: Run Summarizer
         id: run-summarizer
         uses: ./
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
       - name: Print Output
         id: output
