@@ -4,6 +4,10 @@ name: Summarize Action
 on:
   workflow_dispatch:
 
+permissions:
+  issues: write
+  contents: read
+
 jobs:
   summarize-repo:
     name: Summarize Repository
@@ -23,4 +27,4 @@ jobs:
 
       - name: Print Output
         id: output
-        run: 'echo "Summary: ${steps.test-action.outputs.time}"'
+        run: 'echo "Summary: ${{ steps.summarize-repo.outputs.summary }}"'
