@@ -7,11 +7,8 @@ import { wait } from './wait'
  */
 export async function run(): Promise<void> {
   try {
-    // print milliseconds input
-    core.info(`milliseconds: ${core.getInput('milliseconds')}`)
     // Get the action input(s)
     const ms: number = parseInt(core.getInput('milliseconds'), 10)
-    core.info(`Waiting ${ms} milliseconds ...`)
 
     // Output the payload for debugging
     // Debug logs are only output if the `ACTIONS_STEP_DEBUG` secret is true
