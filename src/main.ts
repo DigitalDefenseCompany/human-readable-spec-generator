@@ -33,7 +33,7 @@ async function summarizeRepoContents(): Promise<string> {
   const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY! });
   const completion = await openai.chat.completions.create({
     messages: [{ role: "system", content: "Summarize the following repository content: " + content }],
-    model: "gpt-4o"
+    model: "gpt-3.5-turbo"
   });
 
   const messageContent = completion.choices[0].message?.content;
@@ -62,8 +62,8 @@ async function createOrUpdateIssue(summary: string) {
   const existingIssue = issues.data.find(issue => issue.title === issueTitle);
 
   if (existingIssue) {
-    core.info(`Updating existing issue #${existingIssue.number}...`);
-    await octokit.rest.issues.update({
+    core.info(`Adding comment to existing issue #${existingIssue.number}...`);
+    await octokit.rest.issues.createComment({
       owner,
       repo,
       issue_number: existingIssue.number,
