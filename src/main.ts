@@ -37,7 +37,7 @@ async function summarizeRepoContents(): Promise<string> {
         content: 'Summarize the following repository content: ' + content
       }
     ],
-    model: 'gpt-4'
+    model: 'gpt-4o'
   })
 
   const messageContent = completion.choices[0].message?.content
