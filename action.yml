@@ -2,7 +2,7 @@ name: 'Repository Summarizer'
 description:
   'Summarizes the contents of the repository and creates/updates an issue with
   the summary.'
-author: 'Your name or organization here'
+author: 'The Digital Defense Company'
 
 inputs:
   demo_mode:
