@@ -39634,9 +39634,11 @@ function filterFiles(files) {
 async function summarizeRepoContents() {
     const files = filterFiles(fs.readdirSync('./'));
     let content = '';
+    core.info('Filtering and reading files for summary...');
     files.forEach(file => {
         if (fs.lstatSync(file).isFile()) {
             content += fs.readFileSync(file, 'utf-8') + '\n';
+            core.debug(`Reading file: ${file}`);
         }
     });
     const openai = new openai_1.default({ apiKey: process.env.OPENAI_API_KEY });
@@ -39647,7 +39649,7 @@ async function summarizeRepoContents() {
                 content: 'Summarize the following repository content: ' + content
             }
         ],
-        model: 'gpt-3.5-turbo'
+        model: 'gpt-4'
     });
     const messageContent = completion.choices[0].message?.content;
     if (!messageContent) {
@@ -39666,10 +39668,12 @@ async function createOrUpdateIssue(summary) {
     const octokit = github.getOctokit(githubToken);
     const { owner, repo } = github.context.repo;
     const issueTitle = 'Repository Summary';
+    core.info('Fetching existing issues...');
     const issues = await octokit.rest.issues.listForRepo({ owner, repo });
     const existingIssue = issues.data.find(issue => issue.title === issueTitle);
     if (existingIssue) {
-        await octokit.rest.issues.update({
+        core.info(`Adding comment to existing issue #${existingIssue.number}...`);
+        await octokit.rest.issues.createComment({
             owner,
             repo,
             issue_number: existingIssue.number,
@@ -39677,6 +39681,7 @@ async function createOrUpdateIssue(summary) {
         });
     }
     else {
+        core.info('Creating a new issue...');
         await octokit.rest.issues.create({
             owner,
             repo,
@@ -39687,13 +39692,29 @@ async function createOrUpdateIssue(summary) {
 }
 async function run() {
     try {
-        const openaiApiKey = process.env.OPENAI_API_KEY;
-        if (!openaiApiKey) {
-            throw new Error('OPENAI_API_KEY is not defined');
+        const demoMode = core.getInput('demo_mode') === 'true';
+        let summary = '';
+        if (demoMode) {
+            core.info('Running in demo mode...');
+            summary = JSON.stringify({
+                current: [],
+                proposed: [
+                    'Checking increment method if that works as expected by increasing the value of the number by 1.',
+                    'Checking the setNumber method if it works as expected by setting the symbolic value as expected.'
+                ]
+            }, null, 2);
         }
-        const summary = await summarizeRepoContents();
+        else {
+            const openaiApiKey = process.env.OPENAI_API_KEY;
+            if (!openaiApiKey) {
+                throw new Error('OPENAI_API_KEY is not defined');
+            }
+            core.info('Starting repository summarization...');
+            summary = await summarizeRepoContents();
+        }
         await createOrUpdateIssue(summary);
         core.setOutput('summary', summary);
+        core.info('Repository summarization completed successfully.');
     }
     catch (error) {
         if (error instanceof Error)
@@ -39701,7 +39722,6 @@ async function run() {
     }
 }
 exports.run = run;
-run();
 
 
 /***/ }),

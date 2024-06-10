@@ -4,6 +4,12 @@ description:
   the summary.'
 author: 'Your name or organization here'
 
+inputs:
+  demo_mode:
+    description: 'Run in demo mode with hardcoded values'
+    required: false
+    default: 'false'
+
 outputs:
   summary:
     description: 'The summary of the repository contents'
